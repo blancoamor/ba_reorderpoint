@@ -19,6 +19,20 @@
             <field name="name">stock.presupuesto.form.view</field>
             <field name="model">stock.presupuesto</field>
             <field name="arch" type="xml">
+		<form string="Linea de reposicion">
+			<group>
+				<field name="product_id" />
+				<field name="cantidad" />
+				<field name="monto" readonly="1" />
+			</group>
+		</form>
+	    </field>
+	</record>
+
+        <record id="stock_presupuesto_form_view" model="ir.ui.view">
+            <field name="name">stock.presupuesto.form.view</field>
+            <field name="model">stock.presupuesto</field>
+            <field name="arch" type="xml">
                 <form string="Pedidos de Reposicion">
 			<group>
 			    <field name="name" />
@@ -26,10 +40,10 @@
         	            <field name="monto_presupuesto"/>
 			</group>
 			<field name="presupuesto_lines">
-			    <tree string="Productos" editable="bottom">
+			    <tree string="Productos" >
 				<field name="product_id" />
 				<field name="cantidad" />
-				<field name="monto" />
+				<field name="monto" readonly="1"/>
 			    </tree>
 		        </field>
                 </form>
