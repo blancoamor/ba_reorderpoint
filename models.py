@@ -21,6 +21,8 @@ class stock_presupuesto(models.Model):
 	def process_lines(self):
 		if self.monto_lineas > self.monto_presupuesto:
 			raise ValidationError('El monto de las lineas supera el monto presupuestado')
+		if not self.presupuesto_lines:
+			raise ValidationError('No hay lineas para procesar')
 		self.state = 'process'
 		for linea in self.presupuesto_lines:
 			vals = {

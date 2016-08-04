@@ -9,6 +9,8 @@
                 <tree string="Pedidos de Reposicion">
                     <field name="name" />
                     <field name="warehouse_id"/>
+		    <field name="date_planned"/>
+		    <field name="monto_lineas" />
                     <field name="monto_presupuesto"/>
                     <field name="state"/>
                 </tree>
