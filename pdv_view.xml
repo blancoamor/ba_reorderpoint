@@ -35,6 +35,9 @@
             <field name="model">stock.presupuesto</field>
             <field name="arch" type="xml">
                 <form string="Pedidos de Reposicion">
+			<header>
+				<field name="state" widget="statusbar" readonly="1" />
+			</header>
 			<group>
 			    <field name="name" />
 	                    <field name="warehouse_id"/>
