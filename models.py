@@ -70,6 +70,13 @@ class stock_presupuesto_line(models.Model):
 	_description = 'Lineas de presupuesto para reposicion de stock'
 
 
+	@api.constrains('product_id')
+	def _check_product_id_unique(self):
+		if self.product_id:
+			products = self.search([('product_id','=',self.product_id.id),('presupuesto_id','=',self.presupuesto_id.id)])
+			if len(products) > 1:
+				raise ValidationError('Producto ' + self.product_id.name + '\nya ingresado para el presente presupuesto')
+
 	@api.one
 	def _compute_monto(self):
 		if self.product_id.standard_price:
@@ -86,7 +93,6 @@ class stock_presupuesto_line(models.Model):
 	@api.onchange('product_id')
 	def _onchange_product_id(self):
 		return_value = 0
-		import pdb;pdb.set_trace()
 		if self.product_id:
 			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
 					('state','in',['progress','manual','shipping_except','invoice_except','done'])])
@@ -98,10 +104,16 @@ class stock_presupuesto_line(models.Model):
 						return_value = return_value + line.product_uom_qty
 		self.cantidad_sugerida = return_value
 
+	@api.onchange('cantidad')
+	def _onchange_cantidad(self):
+		if self.cantidad and self.product_id:
+			self.monto = self.cantidad * self.product_id.standard_price
+
 	presupuesto_id = fields.Many2one('stock.presupuesto')
 	product_id = fields.Many2one('product.product',string='Producto',required=True)
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
 	cantidad_sugerida = fields.Integer(string='Cantidad sugerida',readonly=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
+	# monto = fields.Float(string='Costo Calculado')
 	procurement_id = fields.Many2one('procurement.order')
 	procurement_state = fields.Char(string='Estado Pedido',compute=_compute_procurement_state)
