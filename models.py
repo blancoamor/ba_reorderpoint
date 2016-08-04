@@ -82,9 +82,26 @@ class stock_presupuesto_line(models.Model):
 			return_value = self.procurement_id.state
 		self.procurement_state = return_value
 
+	#@api.one
+	@api.onchange('product_id')
+	def _onchange_product_id(self):
+		return_value = 0
+		import pdb;pdb.set_trace()
+		if self.product_id:
+			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
+					('state','in',['progress','manual','shipping_except','invoice_except','done'])])
+			for order in order_ids:
+				line_ids = self.env['sale.order.line'].search([('order_id','=',order.id),\
+						('product_id','=',self.product_id.id)])
+				if line_ids:
+					for line in line_ids:
+						return_value = return_value + line.product_uom_qty
+		self.cantidad_sugerida = return_value
+
 	presupuesto_id = fields.Many2one('stock.presupuesto')
 	product_id = fields.Many2one('product.product',string='Producto',required=True)
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
+	cantidad_sugerida = fields.Integer(string='Cantidad sugerida',readonly=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
 	procurement_id = fields.Many2one('procurement.order')
 	procurement_state = fields.Char(string='Estado Pedido',compute=_compute_procurement_state)
