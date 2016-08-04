@@ -2,6 +2,38 @@
 <openerp>
     <data>
 
+        <record id="stock_presupuesto_tree_view" model="ir.ui.view">
+            <field name="name">stock.presupuesto.tree.view</field>
+            <field name="model">stock.presupuesto</field>
+            <field name="arch" type="xml">
+                <tree string="Pedidos de Reposicion">
+                    <field name="name" />
+                    <field name="warehouse_id"/>
+                    <field name="monto_presupuesto"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_presupuesto_form_view" model="ir.ui.view">
+            <field name="name">stock.presupuesto.form.view</field>
+            <field name="model">stock.presupuesto</field>
+            <field name="arch" type="xml">
+                <form string="Pedidos de Reposicion">
+                    <field name="name" />
+                    <field name="warehouse_id"/>
+                    <field name="monto_presupuesto"/>
+		    <field name="presupuesto_lines">
+			<tree string="Productos" editable="bottom">
+				<field name="product_id" />
+				<field name="cantidad" />
+				<field name="monto" />
+			</tree>
+		    </field>
+                </form>
+            </field>
+        </record>
+
         <record id="action_ba_reorderpoint" model="ir.actions.act_window">
             <field name="name">Puntos de Pedido</field>
             <field name="res_model">stock.presupuesto</field>

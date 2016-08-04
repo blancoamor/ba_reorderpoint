@@ -16,7 +16,8 @@ _logger = logging.getLogger(__name__)
 class stock_presupuesto(models.Model):
 	_name = 'stock.presupuesto'
 	_description = 'Presupuesto periodico para reposicion de stock'
-	
+
+	name = fields.Char('Nombre')	
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal')
 	monto_presupuesto = fields.Float('Presupuesto')
 	state = fields.Selection(selection=[('Borrador','En Proceso')],string='Status')
