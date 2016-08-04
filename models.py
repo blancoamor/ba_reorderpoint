@@ -17,6 +17,12 @@ class stock_presupuesto(models.Model):
 	_name = 'stock.presupuesto'
 	_description = 'Presupuesto periodico para reposicion de stock'
 
+	@api.multi
+	def process_lines(self):
+		if monto_lineas > monto_presupuesto:
+			raise ValidationError('El monto de las lineas supera el monto presupuestado')
+
+
 	@api.one
 	def _compute_monto_lineas(self):
 		return_value = 0
@@ -24,16 +30,25 @@ class stock_presupuesto(models.Model):
 			return_value = return_value + linea.monto
 		self.monto_lineas = return_value
 
+	@api.one
+	def _compute_ok_process(self):
+		if self.monto_presupuesto >= self.monto_lineas:
+			self.ok_process = True
+		else:
+			self.ok_process = False
+
 	name = fields.Char('Nombre')	
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal')
 	monto_presupuesto = fields.Float('Presupuesto')
 	state = fields.Selection(selection=[('draft','Borrador'),('process','En Proceso')],string='Status',default='draft')
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
 	monto_lineas = fields.Float('Monto pedido',compute=_compute_monto_lineas)
+	ok_process = fields.Boolean('OK Proceso',compute=_compute_ok_process)
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'
 	_description = 'Lineas de presupuesto para reposicion de stock'
+
 
 	@api.one
 	def _compute_monto(self):

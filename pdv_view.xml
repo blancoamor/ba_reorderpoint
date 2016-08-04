@@ -36,9 +36,12 @@
             <field name="arch" type="xml">
                 <form string="Pedidos de Reposicion">
 			<header>
+				<button name="process_lines" states="draft" type="object"
+					attrs="{'invisible': [('ok_process','=',True)]}" />
 				<field name="state" widget="statusbar" readonly="1" />
 			</header>
 			<group>
+			    <field name="ok_process" invisible="1" />
 			    <field name="name" />
 	                    <field name="warehouse_id"/>
         	            <field name="monto_presupuesto"/>
