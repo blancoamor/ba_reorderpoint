@@ -15,12 +15,13 @@
             </field>
         </record>
 
-        <record id="stock_presupuesto_form_view" model="ir.ui.view">
-            <field name="name">stock.presupuesto.form.view</field>
-            <field name="model">stock.presupuesto</field>
+        <record id="stock_presupuesto_line_form_view" model="ir.ui.view">
+            <field name="name">stock.presupuesto.line.form.view</field>
+            <field name="model">stock.presupuesto.line</field>
             <field name="arch" type="xml">
 		<form string="Linea de reposicion">
 			<group>
+				<field name="presupuesto_id" readonly="1" />
 				<field name="product_id" />
 				<field name="cantidad" />
 				<field name="monto" readonly="1" />
