@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="action_ba_reorderpoint" model="ir.actions.act_window">
+            <field name="name">Puntos de Pedido</field>
+            <field name="res_model">stock.presupuesto</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="menu_ba_reorderpoint" name="Cuotas" 
+            parent="point_of_sale.menu_point_config_product" 
+            action="action_ba_reorderpoint"
+            sequence="100"/>
+
+
+    </data>
+</openerp>

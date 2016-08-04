@@ -26,5 +26,12 @@ class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'
 	_description = 'Lineas de presupuesto para reposicion de stock'
 
+	@api.onchange('cantidad')
+	def _compute_monto(self):
+		if self.product_id.standard_price:
+			self.monto = self.cantidad * self.product_id.standard_price
+
 	presupuesto_id = fields.Many2one('stock.presupuesto')
-	
+	product_id = fields.Many2one('product.product',string='Producto')
+	cantidad = fields.Integer(string='Cantidad a pedir')
+	monto = fields.Float(string='Costo Calculado',readonly=True)
