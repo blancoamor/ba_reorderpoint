@@ -19,8 +19,22 @@ class stock_presupuesto(models.Model):
 
 	@api.multi
 	def process_lines(self):
-		if monto_lineas > monto_presupuesto:
+		if self.monto_lineas > self.monto_presupuesto:
 			raise ValidationError('El monto de las lineas supera el monto presupuestado')
+		for linea in self.presupuesto_lines:
+			vals = {
+				'name': 'PEDIDO ' + self.name,
+				'date_planned': self.date_planned,
+				'product_id': linea.product_id.id,
+				'product_qty': linea.cantidad,
+				'product_uom': 1,
+				'warehouse_id': self.warehouse_id.id,
+				'location_id': self.warehouse_id.lot_stock_id.id,
+				'company_id': self.warehouse_id.company_id.id,
+				}
+			procure_id = self.env['procurement.order'].create(vals)
+            		procure_id.signal_workflow('button_confirm')
+	
 
 
 	@api.one
@@ -37,8 +51,9 @@ class stock_presupuesto(models.Model):
 		else:
 			self.ok_process = False
 
-	name = fields.Char('Nombre')	
-	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal')
+	name = fields.Char('Nombre',required=True)	
+	date_planned = fields.Date('Fecha Abastecimiento',required=True)
+	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',required=True)
 	monto_presupuesto = fields.Float('Presupuesto')
 	state = fields.Selection(selection=[('draft','Borrador'),('process','En Proceso')],string='Status',default='draft')
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
@@ -56,6 +71,6 @@ class stock_presupuesto_line(models.Model):
 			self.monto = self.cantidad * self.product_id.standard_price
 
 	presupuesto_id = fields.Many2one('stock.presupuesto')
-	product_id = fields.Many2one('product.product',string='Producto')
-	cantidad = fields.Integer(string='Cantidad a pedir')
+	product_id = fields.Many2one('product.product',string='Producto',required=True)
+	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
