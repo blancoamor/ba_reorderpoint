@@ -42,7 +42,7 @@
         </record>
 
 
-        <menuitem id="menu_ba_reorderpoint" name="Cuotas" 
+        <menuitem id="menu_ba_reorderpoint" name="Puntos de Pedido" 
             parent="point_of_sale.menu_point_config_product" 
             action="action_ba_reorderpoint"
             sequence="100"/>
