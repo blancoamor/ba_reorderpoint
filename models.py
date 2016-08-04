@@ -21,9 +21,11 @@ class stock_presupuesto(models.Model):
 	def process_lines(self):
 		if self.monto_lineas > self.monto_presupuesto:
 			raise ValidationError('El monto de las lineas supera el monto presupuestado')
+		self.state = 'process'
 		for linea in self.presupuesto_lines:
 			vals = {
 				'name': 'PEDIDO ' + self.name,
+				'origin': 'PEDIDO ' + self.name,
 				'date_planned': self.date_planned,
 				'product_id': linea.product_id.id,
 				'product_qty': linea.cantidad,
@@ -34,6 +36,7 @@ class stock_presupuesto(models.Model):
 				}
 			procure_id = self.env['procurement.order'].create(vals)
             		procure_id.signal_workflow('button_confirm')
+			linea.procurement_id = procure_id.id
 	
 
 
@@ -74,3 +77,4 @@ class stock_presupuesto_line(models.Model):
 	product_id = fields.Many2one('product.product',string='Producto',required=True)
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
+	procurement_id = fields.Many2one('procurement.order')
