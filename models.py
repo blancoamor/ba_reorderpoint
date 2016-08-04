@@ -73,6 +73,13 @@ class stock_presupuesto_line(models.Model):
 		if self.product_id.standard_price:
 			self.monto = self.cantidad * self.product_id.standard_price
 
+	@api.one
+	def _compute_procurement_state(self):
+		return_value = 'N/A'
+		if self.procurement_id:
+			return_value = self.procurement_id.state
+		self.procurement_state = return_value
+
 	presupuesto_id = fields.Many2one('stock.presupuesto')
 	product_id = fields.Many2one('product.product',string='Producto',required=True)
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
