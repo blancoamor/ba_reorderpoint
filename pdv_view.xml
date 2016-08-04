@@ -20,16 +20,18 @@
             <field name="model">stock.presupuesto</field>
             <field name="arch" type="xml">
                 <form string="Pedidos de Reposicion">
-                    <field name="name" />
-                    <field name="warehouse_id"/>
-                    <field name="monto_presupuesto"/>
-		    <field name="presupuesto_lines">
-			<tree string="Productos" editable="bottom">
+			<group>
+			    <field name="name" />
+	                    <field name="warehouse_id"/>
+        	            <field name="monto_presupuesto"/>
+			</group>
+			<field name="presupuesto_lines">
+			    <tree string="Productos" editable="bottom">
 				<field name="product_id" />
 				<field name="cantidad" />
 				<field name="monto" />
-			</tree>
-		    </field>
+			    </tree>
+		        </field>
                 </form>
             </field>
         </record>
