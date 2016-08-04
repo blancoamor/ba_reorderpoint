@@ -42,6 +42,7 @@
 			    <field name="name" />
 	                    <field name="warehouse_id"/>
         	            <field name="monto_presupuesto"/>
+        	            <field name="monto_lineas"/>
 			</group>
 			<field name="presupuesto_lines">
 			    <tree string="Productos" >

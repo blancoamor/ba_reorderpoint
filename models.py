@@ -17,11 +17,19 @@ class stock_presupuesto(models.Model):
 	_name = 'stock.presupuesto'
 	_description = 'Presupuesto periodico para reposicion de stock'
 
+	@api.one
+	def _compute_monto_lineas(self):
+		return_value = 0
+		for linea in self.presupuesto_lines:
+			return_value = return_value + linea.monto
+		self.monto_lineas = return_value
+
 	name = fields.Char('Nombre')	
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal')
 	monto_presupuesto = fields.Float('Presupuesto')
 	state = fields.Selection(selection=[('draft','Borrador'),('process','En Proceso')],string='Status',default='draft')
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
+	monto_lineas = fields.Float('Monto pedido',compute=_compute_monto_lineas)
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'
