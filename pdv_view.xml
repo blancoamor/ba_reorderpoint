@@ -44,15 +44,15 @@
 			</header>
 			<group>
 			    <field name="ok_process" invisible="1" />
-			    <field name="name" />
-	                    <field name="warehouse_id"/>
-			    <field name="date_planned" />
+			    <field name="name" attrs="{'readonly': [('state','=','process')]}"/>
+	                    <field name="warehouse_id" attrs="{'readonly': [('state','=','process')]}"/>
+			    <field name="date_planned" attrs="{'readonly': [('state','=','process')]}"/>
 			</group>
 			<group string="Montos" cols="4" colspan="4">
-        	            <field name="monto_presupuesto"/>
+        	            <field name="monto_presupuesto" attrs="{'readonly': [('state','=','process')]}"/>
         	            <field name="monto_lineas"/>
 			</group>
-			<field name="presupuesto_lines">
+			<field name="presupuesto_lines" attrs="{'readonly': [('state','=','process')]}">
 			    <tree string="Productos" >
 				<field name="product_id" />
 				<field name="cantidad" />
