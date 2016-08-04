@@ -37,6 +37,7 @@
                 <form string="Pedidos de Reposicion">
 			<header>
 				<button name="process_lines" states="draft" type="object"
+					string="Procesar Pedido" class="oe_highlight" 
 					attrs="{'invisible': [('ok_process','=',True)]}" />
 				<field name="state" widget="statusbar" readonly="1" />
 			</header>
@@ -44,6 +45,9 @@
 			    <field name="ok_process" invisible="1" />
 			    <field name="name" />
 	                    <field name="warehouse_id"/>
+			    <field name="date_planned" />
+			</group>
+			<group string="Montos" cols="4" colspan="4">
         	            <field name="monto_presupuesto"/>
         	            <field name="monto_lineas"/>
 			</group>
