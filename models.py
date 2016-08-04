@@ -78,3 +78,4 @@ class stock_presupuesto_line(models.Model):
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
 	procurement_id = fields.Many2one('procurement.order')
+	procurement_state = fields.Char(string='Estado Pedido',related='procurement_id.state')

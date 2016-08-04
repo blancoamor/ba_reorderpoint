@@ -58,6 +58,7 @@
 				<field name="cantidad" />
 				<field name="monto" readonly="1"/>
 				<field name="procurement_id" readonly="1"/>
+				<field name="procurement_state" readonly="1" />
 			    </tree>
 		        </field>
                 </form>
