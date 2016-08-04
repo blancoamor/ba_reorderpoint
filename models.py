@@ -20,7 +20,7 @@ class stock_presupuesto(models.Model):
 	name = fields.Char('Nombre')	
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal')
 	monto_presupuesto = fields.Float('Presupuesto')
-	state = fields.Selection(selection=[('Borrador','En Proceso')],string='Status')
+	state = fields.Selection(selection=[('draft','Borrador'),('process','En Proceso')],string='Status',default='draft')
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
 
 class stock_presupuesto_line(models.Model):
@@ -35,4 +35,4 @@ class stock_presupuesto_line(models.Model):
 	presupuesto_id = fields.Many2one('stock.presupuesto')
 	product_id = fields.Many2one('product.product',string='Producto')
 	cantidad = fields.Integer(string='Cantidad a pedir')
-	monto = fields.Float(string='Costo Calculado',readonly=True)
+	monto = fields.Float(string='Costo Calculado')
