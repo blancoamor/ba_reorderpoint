@@ -121,11 +121,12 @@ class stock_presupuesto_line(models.Model):
 	#@api.one
 	@api.onchange('product_id')
 	def _onchange_product_id(self):
-		return_value = 0
 		if self.product_id:
+			return_value = 0
 			if self.product_id.product_tmpl_id.business_unit_id.id != self.presupuesto_id.business_unit.id:
 				raise ValidationError('Producto no pertenece a la business unit del pedido')
-			mes_anterior = str(datetime.now() - relativedelta(months=1))
+			mes_anterior = str(datetime.now() - relativedelta.relativedelta(months=1))
+			semana_anterior = str(datetime.now() - timedelta.relativedelta(days=1))
 			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
 					('state','in',['progress','manual','shipping_except','invoice_except','done']),
 					('date_order','>=',mes_anterior)])
@@ -135,7 +136,19 @@ class stock_presupuesto_line(models.Model):
 				if line_ids:
 					for line in line_ids:
 						return_value = return_value + line.product_uom_qty
-		self.cantidad_sugerida = return_value
+			self.cantidad_sugerida = return_value
+			return_value_1wk = 0
+			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
+					('state','in',['progress','manual','shipping_except','invoice_except','done']),
+					('date_order','>=',semana_anterior)])
+			for order in order_ids:
+				line_ids = self.env['sale.order.line'].search([('order_id','=',order.id),\
+						('product_id','=',self.product_id.id)])
+				if line_ids:
+					for line in line_ids:
+						return_value_1wk = return_value_1wk + line.product_uom_qty
+			self.cantidad_vendida_1wk = return_value_1wk
+
 
 	@api.onchange('cantidad')
 	def _onchange_cantidad(self):
@@ -146,6 +159,7 @@ class stock_presupuesto_line(models.Model):
 	product_id = fields.Many2one('product.product',string='Producto',required=True)
 	cantidad = fields.Integer(string='Cantidad a pedir',required=True)
 	cantidad_sugerida = fields.Integer(string='Cantidad sugerida',readonly=True)
+	cantidad_vendida_1wk = fields.Integer(string='Cantidad vendida semana anterior',readonly=True)
 	monto = fields.Float(string='Costo Calculado',compute=_compute_monto)
 	# monto = fields.Float(string='Costo Calculado')
 	procurement_id = fields.Many2one('procurement.order')

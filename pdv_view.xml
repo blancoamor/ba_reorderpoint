@@ -34,6 +34,7 @@
 				<page string="Estadisticas">
 					<group>
 						<field name="cantidad_sugerida" readonly="1" string="Cantidad vendida mes anterior"/>
+						<field name="cantidad_vendida_1wk" readonly="1" string="Cantidad vendida semana anterior"/>
 					</group>
 				</page>
 			</notebook>
