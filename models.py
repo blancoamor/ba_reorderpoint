@@ -24,10 +24,18 @@ class stock_presupuesto_calendar(models.Model):
 		if len(calendario_ids) > 1:
 			raise ValidationError('Ya se encuentra creado el presupuesto para la fecha/sucursal indicada')
 
+	@api.one
+	@api.depends('name', 'warehouse_id','date')
+        def _compute_display_name(self):
+            names = [self.warehouse_id.name, self.name, str(self.date)]
+            self.display_name = ' / '.join(filter(None, names))
+
+
 	name = fields.Char('Nombre',required=True)
 	date = fields.Date(string='Fecha Prespuesto', default=fields.Date.today(),required=True)
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',required=True)
 	presupuesto = fields.Float('Presupuesto')
+	display_name = fields.Char('Nombre',compute=_compute_display_name)
 
 class stock_presupuesto(models.Model):
 	_name = 'stock.presupuesto'
@@ -109,6 +117,7 @@ class stock_presupuesto(models.Model):
 	ok_process = fields.Boolean('OK Proceso',compute=_compute_ok_process)
 	presupuesto_previo = fields.Many2one('stock.presupuesto',string='Presupuesto anterior',compute=_compute_presupuesto_previo)
 	business_unit = fields.Many2one('business.unit',required=True)
+	calendar_id = fields.Many2one('stock.presupuesto.calendar',string='Calendario')
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'

@@ -58,6 +58,7 @@
 			    <field name="ok_process" invisible="1" />
 			    <field name="business_unit" attrs="{'readonly': [('state','=','process')]}" />
 			    <field name="name" attrs="{'readonly': [('state','=','process')]}"/>
+			    <field name="calendar_id" string="Fecha Pedido" />
 	                    <field name="warehouse_id" attrs="{'readonly': [('state','=','process')]}"/>
 			    <field name="date_planned" attrs="{'readonly': [('state','=','process')]}"/>
 			</group>
@@ -87,6 +88,21 @@
             </field>
         </record>
 
+        <record id="stock_presupuesto_calendar_calendar_view" model="ir.ui.view">
+            <field name="name">stock.presupuesto.calendar.calendar.view</field>
+            <field name="model">stock.presupuesto.calendar</field>
+            <field name="arch" type="xml">
+                <calendar string="Pedidos de Reposicion - Calendario" date_start="date" date_stop="date" color="warehouse_id" mode="month">
+			<group>
+				<field name="name" />
+				<field name="warehouse_id" />
+				<field name="date" />
+				<field name="presupuesto" />
+			</group>
+		</calendar>
+	    </field>
+	</record>
+
         <record id="stock_presupuesto_calendar_form_view" model="ir.ui.view">
             <field name="name">stock.presupuesto.calendar.form.view</field>
             <field name="model">stock.presupuesto.calendar</field>
@@ -113,7 +129,7 @@
             <field name="name">Puntos de Pedido - Calendario</field>
             <field name="res_model">stock.presupuesto.calendar</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar</field>
         </record>
 
         <menuitem id="menu_ba_reorderpoint" name="Puntos de Pedido" 
