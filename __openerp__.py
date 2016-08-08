@@ -2,7 +2,7 @@
     'name': 'Blancoamor - Puntos de reposicion',
     'category': 'POS',
     'version': '0.1',
-    'depends': ['base','product','procurement','stock','point_of_sale'],
+    'depends': ['base','product','procurement','stock','point_of_sale','ba_business_unit'],
     'data': [
 	#'security/ir.model.access.csv',
 	#'security/security.xml',
