@@ -56,6 +56,14 @@ class stock_presupuesto(models.Model):
 		else:
 			self.ok_process = False
 
+	@api.constrains('business_unit','warehouse_id')
+	def _check_business_unit(self):
+		presupuestos = self.env['stock.presupuesto'].search([('warehouse_id','=',self.warehouse_id.id),\
+				('business_unit','=',self.business_unit.id),('state','=','draft')])
+		if len(presupuestos) > 1:
+			raise ValidationError('Ya existe un pedido creado para la business unit ' + self.business_unit.name + \
+				' sucursal ' + self.warehouse_id.name)
+
 	@api.one
 	def _compute_presupuesto_previo(self):
 		return_value = None
