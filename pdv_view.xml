@@ -7,6 +7,7 @@
             <field name="model">stock.presupuesto</field>
             <field name="arch" type="xml">
                 <tree string="Pedidos de Reposicion">
+                    <field name="business_unit" />
                     <field name="name" />
                     <field name="warehouse_id"/>
 		    <field name="date_planned"/>
@@ -47,6 +48,7 @@
 			</header>
 			<group>
 			    <field name="ok_process" invisible="1" />
+			    <field name="business_unit" attrs="{'readonly': [('state','=','process')]}" />
 			    <field name="name" attrs="{'readonly': [('state','=','process')]}"/>
 	                    <field name="warehouse_id" attrs="{'readonly': [('state','=','process')]}"/>
 			    <field name="date_planned" attrs="{'readonly': [('state','=','process')]}"/>

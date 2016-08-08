@@ -77,6 +77,7 @@ class stock_presupuesto(models.Model):
 	monto_lineas = fields.Float('Monto pedido',compute=_compute_monto_lineas)
 	ok_process = fields.Boolean('OK Proceso',compute=_compute_ok_process)
 	presupuesto_previo = fields.Many2one('stock.presupuesto',string='Presupuesto anterior',compute=_compute_presupuesto_previo)
+	business_unit = fields.Many2one('business.unit',required=True)
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'
