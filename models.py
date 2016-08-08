@@ -63,7 +63,8 @@ class stock_presupuesto(models.Model):
 					('state','=','process')],order='date_planned desc',limit=1)
 		if presupuesto_id:
 			self.presupuesto_previo = presupuesto_id.id
-		self.presupuesto_previo = return_value 
+		else:
+			self.presupuesto_previo = None
 
 	name = fields.Char('Nombre',required=True)	
 	date_planned = fields.Date('Fecha Abastecimiento',required=True)
