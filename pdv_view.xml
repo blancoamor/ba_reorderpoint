@@ -24,10 +24,9 @@
             <field name="arch" type="xml">
 		<form string="Linea de reposicion">
 			<group>
-				<field name="presupuesto_id" readonly="1" />
+				<!-- field name="presupuesto_id" readonly="1" / -->
 				<field name="product_id" />
 				<field name="cantidad" />
-				<field name="cantidad_sugerida" readonly="1"/>
 				<field name="monto" readonly="1" />
 				<field name="procurement_id" readonly="1" />
 			</group>
