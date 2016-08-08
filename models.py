@@ -56,6 +56,15 @@ class stock_presupuesto(models.Model):
 		else:
 			self.ok_process = False
 
+	@api.one
+	def _compute_presupuesto_previo(self):
+		return_value = None
+		presupuesto_id = self.env['stock.presupuesto'].search([('warehouse_id','=',self.warehouse_id.id),\
+					('state','=','process')],order='date_planned desc',limit=1)
+		if presupuesto_id:
+			self.presupuesto_previo = presupuesto_id.id
+		self.presupuesto_previo = return_value 
+
 	name = fields.Char('Nombre',required=True)	
 	date_planned = fields.Date('Fecha Abastecimiento',required=True)
 	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',required=True)
@@ -64,6 +73,7 @@ class stock_presupuesto(models.Model):
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
 	monto_lineas = fields.Float('Monto pedido',compute=_compute_monto_lineas)
 	ok_process = fields.Boolean('OK Proceso',compute=_compute_ok_process)
+	presupuesto_previo = fields.Many2one('stock.presupuesto',string='Presupuesto anterior',compute=_compute_presupuesto_previo)
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'

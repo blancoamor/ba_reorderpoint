@@ -55,15 +55,24 @@
         	            <field name="monto_presupuesto" attrs="{'readonly': [('state','=','process')]}"/>
         	            <field name="monto_lineas"/>
 			</group>
-			<field name="presupuesto_lines" attrs="{'readonly': [('state','=','process')]}">
-			    <tree string="Productos" >
-				<field name="product_id" />
-				<field name="cantidad" />
-				<field name="monto" readonly="1"/>
-				<field name="procurement_id" readonly="1"/>
-				<field name="procurement_state" readonly="1" />
-			    </tree>
-		        </field>
+			<notebook>
+				<page string="Productos">
+					<field name="presupuesto_lines" attrs="{'readonly': [('state','=','process')]}">
+					    <tree string="Productos" >
+						<field name="product_id" />
+						<field name="cantidad" />
+						<field name="monto" readonly="1"/>
+						<field name="procurement_id" readonly="1"/>
+						<field name="procurement_state" readonly="1" />
+					    </tree>
+			        	</field>
+				</page>
+				<page string="Pedido anterior">
+					<group>
+						<field name="presupuesto_previo" />
+					</group>
+				</page>
+			</notebook>
                 </form>
             </field>
         </record>
