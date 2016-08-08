@@ -7,8 +7,8 @@ import openerp.addons.decimal_precision as dp
 import logging
 import datetime
 from openerp.fields import Date as newdate
-from datetime import datetime
-
+from datetime import datetime, timedelta
+from dateutil import relativedelta
 #Get the logger
 _logger = logging.getLogger(__name__)
 
@@ -125,8 +125,10 @@ class stock_presupuesto_line(models.Model):
 		if self.product_id:
 			if self.product_id.product_tmpl_id.business_unit_id.id != self.presupuesto_id.business_unit.id:
 				raise ValidationError('Producto no pertenece a la business unit del pedido')
+			mes_anterior = str(datetime.now() - relativedelta(months=1))
 			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
-					('state','in',['progress','manual','shipping_except','invoice_except','done'])])
+					('state','in',['progress','manual','shipping_except','invoice_except','done']),
+					('date_order','>=',mes_anterior)])
 			for order in order_ids:
 				line_ids = self.env['sale.order.line'].search([('order_id','=',order.id),\
 						('product_id','=',self.product_id.id)])

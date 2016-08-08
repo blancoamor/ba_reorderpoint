@@ -33,6 +33,7 @@
 			</group>
 			<notebook>
 				<page string="Estadisticas">
+					<field name="cantidad_sugerida" readonly="1" string="Cantidad vendida mes anterior"/>
 				</page>
 			</notebook>
 		</form>
