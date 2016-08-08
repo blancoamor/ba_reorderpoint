@@ -60,9 +60,11 @@ class stock_presupuesto(models.Model):
 	def _compute_presupuesto_previo(self):
 		return_value = None
 		presupuesto_id = self.env['stock.presupuesto'].search([('warehouse_id','=',self.warehouse_id.id),\
-					('state','=','process')],order='date_planned desc',limit=1)
+					('state','=','process')],order='date_planned desc',limit=2)
 		if presupuesto_id:
-			self.presupuesto_previo = presupuesto_id.id
+			for presupuesto in presupuesto_id:
+				if presupuesto.id != self.id:
+					self.presupuesto_previo = presupuesto.id
 		else:
 			self.presupuesto_previo = None
 
