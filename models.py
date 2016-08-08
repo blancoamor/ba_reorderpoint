@@ -95,29 +95,34 @@ class stock_presupuesto(models.Model):
 			raise ValidationError('Ya existe un pedido creado para la business unit ' + self.business_unit.name + \
 				' sucursal ' + self.warehouse_id.name)
 
+
+	@api.onchange('calendar_id')
+	def _onchange_calendar_id(self):
+		if self.calendar_id:
+			self.warehouse_id = self.calendar_id.warehouse_id.id
+			self.date_planned = self.calendar_id.date
+			self.monto_presupuesto = self.calendar_id.presupuesto
+
 	@api.one
-	def _compute_presupuesto_previo(self):
-		return_value = None
-		presupuesto_id = self.env['stock.presupuesto'].search([('business_unit','=',self.business_unit.id),\
-					('warehouse_id','=',self.warehouse_id.id),\
-					('id','<',self.id),
-					('state','=','process')],order='date_planned desc',limit=1)
-		if presupuesto_id:
-			self.presupuesto_previo = presupuesto_id.id
-		else:
-			self.presupuesto_previo = None
+	def compute_date_calendar(self):
+		if self.calendar_id:
+			self.date_planned = self.calendar_id.date
+
+	@api.one
+	def compute_monto_presupuesto(self):
+		if self.calendar_id:
+			self.monto_presupuesto = self.calendar_id.presupuesto
 
 	name = fields.Char('Nombre',required=True)	
-	date_planned = fields.Date('Fecha Abastecimiento',required=True)
-	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',required=True)
-	monto_presupuesto = fields.Float('Presupuesto')
+	date_planned = fields.Date('Fecha Abastecimiento',compute=compute_date_calendar)
+	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',related='calendar_id.warehouse_id')
+	monto_presupuesto = fields.Float('Presupuesto',compute=compute_monto_presupuesto)
 	state = fields.Selection(selection=[('draft','Borrador'),('process','En Proceso')],string='Status',default='draft')
 	presupuesto_lines = fields.One2many(comodel_name='stock.presupuesto.line',inverse_name='presupuesto_id')
 	monto_lineas = fields.Float('Monto pedido',compute=_compute_monto_lineas)
 	ok_process = fields.Boolean('OK Proceso',compute=_compute_ok_process)
-	presupuesto_previo = fields.Many2one('stock.presupuesto',string='Presupuesto anterior',compute=_compute_presupuesto_previo)
 	business_unit = fields.Many2one('business.unit',required=True)
-	calendar_id = fields.Many2one('stock.presupuesto.calendar',string='Calendario')
+	calendar_id = fields.Many2one('stock.presupuesto.calendar',string='Calendario',required=True)
 
 class stock_presupuesto_line(models.Model):
 	_name = 'stock.presupuesto.line'

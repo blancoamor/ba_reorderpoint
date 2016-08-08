@@ -59,11 +59,11 @@
 			    <field name="business_unit" attrs="{'readonly': [('state','=','process')]}" />
 			    <field name="name" attrs="{'readonly': [('state','=','process')]}"/>
 			    <field name="calendar_id" string="Fecha Pedido" />
-	                    <field name="warehouse_id" attrs="{'readonly': [('state','=','process')]}"/>
-			    <field name="date_planned" attrs="{'readonly': [('state','=','process')]}"/>
+	                    <field name="warehouse_id" readonly="1"/>
+			    <field name="date_planned" readonly="1"/>
 			</group>
 			<group string="Montos" cols="4" colspan="4">
-        	            <field name="monto_presupuesto" attrs="{'readonly': [('state','=','process')]}"/>
+        	            <field name="monto_presupuesto" readonly="1"/>
         	            <field name="monto_lineas"/>
 			</group>
 			<notebook>
@@ -78,11 +78,6 @@
 					    </tree>
 			        	</field>
 				</page>
-				<page string="Pedido anterior">
-					<group>
-						<field name="presupuesto_previo" />
-					</group>
-				</page>
 			</notebook>
                 </form>
             </field>
@@ -92,12 +87,9 @@
             <field name="name">stock.presupuesto.calendar.calendar.view</field>
             <field name="model">stock.presupuesto.calendar</field>
             <field name="arch" type="xml">
-                <calendar string="Pedidos de Reposicion - Calendario" date_start="date" date_stop="date" color="warehouse_id" mode="month">
+                <calendar string="Pedidos de Reposicion - Calendario" date_start="date" color="warehouse_id" >
 			<group>
 				<field name="name" />
-				<field name="warehouse_id" />
-				<field name="date" />
-				<field name="presupuesto" />
 			</group>
 		</calendar>
 	    </field>
