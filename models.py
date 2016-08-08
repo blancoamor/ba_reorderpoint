@@ -42,6 +42,13 @@ class stock_presupuesto(models.Model):
 	
 
 
+	@api.multi
+	def unlink(self):
+		if self.state != 'draft':
+			raise ValidationError('No se pueden borrar pedidos de stock en proceso')
+	        return super(stock_presupuesto, self).unlink()
+
+
 	@api.one
 	def _compute_monto_lineas(self):
 		return_value = 0
