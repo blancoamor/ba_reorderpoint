@@ -13,6 +13,22 @@ from dateutil import relativedelta
 _logger = logging.getLogger(__name__)
 
 
+class stock_presupuesto_calendar(models.Model):
+	_name = 'stock.presupuesto.calendar'
+	_description = 'Agenda de presupuestos por sucursal'
+
+	@api.constrains('date','warehouse_id')
+	def _check_date_warehouse(self):
+		calendario_ids = self.env['stock.presupuesto.calendar'].search([('warehouse_id','=',self.warehouse_id.id),\
+				('date','=',self.date)])
+		if len(calendario_ids) > 1:
+			raise ValidationError('Ya se encuentra creado el presupuesto para la fecha/sucursal indicada')
+
+	name = fields.Char('Nombre',required=True)
+	date = fields.Date(string='Fecha Prespuesto', default=fields.Date.today(),required=True)
+	warehouse_id = fields.Many2one('stock.warehouse',string='Sucursal',required=True)
+	presupuesto = fields.Float('Presupuesto')
+
 class stock_presupuesto(models.Model):
 	_name = 'stock.presupuesto'
 	_description = 'Presupuesto periodico para reposicion de stock'
