@@ -67,11 +67,20 @@ class stock_presupuesto(models.Model):
 	@api.one
 	def _compute_presupuesto_previo(self):
 		return_value = None
+		if self.state == 'process':
+			limite = 2
+		else:
+			limite = 1
 		presupuesto_id = self.env['stock.presupuesto'].search([('business_unit','=',self.business_unit.id),\
 					('warehouse_id','=',self.warehouse_id.id),\
-					('state','=','process')],order='date_planned desc',limit=1)
+					('state','=','process')],order='date_planned desc',limit=limite)
 		if presupuesto_id:
-			self.presupuesto_previo = presupuesto_id.id
+			if limite == 1:
+				self.presupuesto_previo = presupuesto_id.id
+			else:
+				for presupuesto in presupuesto_id:
+					if presuesto.id != self.id:
+						self.presupuesto_previo = presupuesto.id
 		else:
 			self.presupuesto_previo = None
 
