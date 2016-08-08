@@ -127,7 +127,7 @@ class stock_presupuesto_line(models.Model):
 				raise ValidationError('Producto no pertenece a la business unit del pedido')
 			mes_anterior = str(datetime.now() - relativedelta.relativedelta(months=1))
 			semana_anterior = str(datetime.now() - timedelta(days=7))
-			semana_2k = str(datetime.now() - timedelta(days=14))
+			semana_2wk = str(datetime.now() - timedelta(days=14))
 			order_ids = self.env['sale.order'].search([('warehouse_id','=',self.presupuesto_id.warehouse_id.id),\
 					('state','in',['progress','manual','shipping_except','invoice_except','done']),
 					('date_order','>=',mes_anterior)])
