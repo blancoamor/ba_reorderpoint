@@ -79,7 +79,7 @@ class stock_presupuesto(models.Model):
 				self.presupuesto_previo = presupuesto_id.id
 			else:
 				for presupuesto in presupuesto_id:
-					if presuesto.id != self.id:
+					if presupuesto.id != self.id:
 						self.presupuesto_previo = presupuesto.id
 		else:
 			self.presupuesto_previo = None
